@@ -1,7 +1,5 @@
 import { UserModuleModule } from '../user/user.module';
-import { ShoesModule } from './../Shoes/Shoes.module';
-import { UserService } from '../user/user';
-import { ShoesService } from './../Shoes/Shoes.service';
+import { ShoesModule } from './../shoes/shoes.module';
 import { Module } from '@nestjs/common';
 import { CartController } from './cart.controller';
 import { CartService } from './cart.service';

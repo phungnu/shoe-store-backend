@@ -1,7 +1,7 @@
 import { IUserRes, IUserDTO } from '../user/user.type';
 import { UserService } from '../user/user';
-import { IShoesRes } from './../Shoes/Shoes.type';
-import { ShoesService } from './../Shoes/Shoes.service';
+import { IShoesRes } from './../shoes/shoes.type';
+import { ShoesService } from './../shoes/shoes.service';
 import { IResCart, IShoesInCart } from './cart.type';
 import { Injectable } from '@nestjs/common';
 import { cartDb } from 'src/database';

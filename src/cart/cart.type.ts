@@ -1,4 +1,4 @@
-import { IShoesRes } from 'src/Shoes/Shoes.type';
+import { IShoesRes } from 'src/shoes/shoes.type';
 import { IUserRes } from '../user/user.type';
 
 export interface IResCart {

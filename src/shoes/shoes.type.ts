@@ -1,4 +1,4 @@
-export interface IPhoneRes {
+export interface IShoesRes {
     id: number,
     name: string,
     description: string,

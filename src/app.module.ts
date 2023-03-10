@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModuleModule } from './user-module/user-module.module';
-import { PhoneModule } from './phone/phone.module';
+import { UserModuleModule } from './user/user-module.module';
+import { ShoesModule } from './Shoes/Shoes.module';
 import { CartModule } from './cart/cart.module';
 
 @Module({
@@ -12,7 +12,7 @@ import { CartModule } from './cart/cart.module';
     ConfigModule.forRoot({
       ignoreEnvFile: true,
     }),
-    PhoneModule,
+    ShoesModule,
     CartModule
   ],
   controllers: [AppController],

@@ -1,12 +1,12 @@
-import { IPhoneRes } from 'src/phone/phone.type';
-import { IUserRes } from './../user-module/user.type';
+import { IShoesRes } from 'src/Shoes/Shoes.type';
+import { IUserRes } from '../user/user.type';
 
 export interface IResCart {
     user: IUserRes,
-    listPhone: IPhoneInCart[]
+    listShoes: IShoesInCart[]
 }
 
-export interface IPhoneInCart {
-    phone: IPhoneRes,
+export interface IShoesInCart {
+    Shoes: IShoesRes,
     amount: number
 }

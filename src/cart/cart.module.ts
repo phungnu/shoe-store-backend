@@ -1,6 +1,6 @@
-import { UserModuleModule } from '../user/user-module.module';
+import { UserModuleModule } from '../user/user.module';
 import { ShoesModule } from './../Shoes/Shoes.module';
-import { UserService } from '../user/user-service';
+import { UserService } from '../user/user';
 import { ShoesService } from './../Shoes/Shoes.service';
 import { Module } from '@nestjs/common';
 import { CartController } from './cart.controller';

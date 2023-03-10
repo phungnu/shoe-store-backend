@@ -1,5 +1,5 @@
 import { IUserRes, IUserDTO } from '../user/user.type';
-import { UserService } from '../user/user-service';
+import { UserService } from '../user/user';
 import { IShoesRes } from './../Shoes/Shoes.type';
 import { ShoesService } from './../Shoes/Shoes.service';
 import { IResCart, IShoesInCart } from './cart.type';

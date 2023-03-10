@@ -2,7 +2,7 @@ import { IRegister, ILogin, IUserDTO, IUserResponse } from './user.type';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { failResponse, successResponse} from 'src/utils/http';
-import { UserService } from './user-service';
+import { UserService } from './user';
 import { JwtService } from '@nestjs/jwt';
 
 @Controller('users')

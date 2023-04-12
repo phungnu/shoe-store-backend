@@ -1,21 +1,31 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModuleModule } from './user/user.module';
-import { ShoesModule } from './shoes/shoes.module';
-import { CartModule } from './cart/cart.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TaskModule } from './task/task.module';
+import { Task } from './task/task.entity';
+import { User } from './user/user.entity';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [
-    UserModuleModule,
-    ConfigModule.forRoot({
-      ignoreEnvFile: true,
-    }),
-    ShoesModule,
-    CartModule
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [
+		TypeOrmModule.forRoot({
+			type: 'mysql',
+			host: 'localhost',
+			// port: 3306,
+			username: 'root',
+			password: 'root',
+			database: 'thuctapcoso',
+			entities: [Task, User],
+			synchronize: true,
+		}),
+		TaskModule,
+		UserModule
+	],
+	controllers: [
+		AppController
+	],
+	providers: [AppService],
 })
 export class AppModule {}
+

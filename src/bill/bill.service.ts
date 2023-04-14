@@ -3,13 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Bill } from './bill.entity';
 import { Repository } from 'typeorm';
 import { ICreateBill } from './bill.type';
-import { ShoebillService } from 'src/shoebill/shoebill.service';
+import { ShoebillService } from '../shoebill/shoebill.service';
 
 @Injectable()
 export class BillService {
     constructor(
         @InjectRepository(Bill) private readonly billRepo: Repository<Bill>,
-        private readonly shoeBillService: ShoebillService
     ){}
 
     async findAll(): Promise<Bill[]> {

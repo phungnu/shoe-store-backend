@@ -3,7 +3,7 @@ import { UserService } from './user.service'
 import { User } from './user.entity'
 import { ApiTags } from '@nestjs/swagger';
 import { failResponse, successResponse } from 'src/utils/http';
-import { ILogin, IUserDTO } from './user.type';
+import { ILogin, IRegister, IUserCreate, IUserDTO } from './user.type';
 
 
 @Controller('users')
@@ -18,14 +18,42 @@ export class UserController {
         try {
             if ( !input.username || !input.password ) 
                 return failResponse('Cần điền đầy đủ thông tin', 'FieldIsRequired');
-            const user: IUserDTO = await this.userService.findByUsername(input.username);
-            if (user==null || user.password !== input.password)
+            const user: IUserDTO = await this.userService.checkLogin(input.username, input.password);
+            
+            if (user==null)
                 return failResponse('Username hoặc password không đúng', 'WrongCredentials');
             return successResponse(user);
         } catch(error) {    
+            console.log(error)
             return failResponse('Execute service went wrong', 'ServiceException');
         }
     }
+
+    @Post('/register')
+    async regiser(@Body() input: IRegister): Promise<any> {
+        try {
+            if ( !input.username || !input.password || !input.confirmPassword ) 
+                return failResponse('Cần điền đầy đủ thông tin', 'FieldIsRequired');
+            if ( input.password != input.confirmPassword)
+                return failResponse('Confirm password not equal', 'ConfirmNotEqual');
+            if ( input.password.length < 8 ) 
+                return failResponse('Password must be longer 8 character','PasswordLengthShort');
+            const user: IUserDTO = await this.userService.findByUsername(input.username);
+            if (user!=null)
+                return failResponse('Username đã tồn tại', 'WrongCredentials');
+            const data: IUserCreate = {
+                username: input.username,
+                password: input.password,
+                createAt: Date.now().toLocaleString()
+            }
+            const res = await this.userService.create(data)
+            return successResponse(res);
+        } catch(error) {    
+            console.log(error)
+            return failResponse('Execute service went wrong', 'ServiceException');
+        }
+    }
+
 
     @Get('/getAll')
     async findAll(): Promise<any> {
@@ -65,4 +93,3 @@ export class UserController {
         return this.userService.delete(params.id);
     }
 }
-

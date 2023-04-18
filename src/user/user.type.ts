@@ -38,3 +38,9 @@ export interface IUserRes {
     id: number,
     username: string
 }
+
+export interface IUserCreate {
+    username: string,
+    password: string,
+    createAt: string
+}

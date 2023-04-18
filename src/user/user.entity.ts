@@ -12,7 +12,7 @@ export class User {
     password: string;
 
     @Column()
-    createAt: Date;
+    createAt: string;
 
 }
 

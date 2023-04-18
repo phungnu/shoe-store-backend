@@ -3,6 +3,7 @@ import { User } from './user.entity'
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateResult, DeleteResult } from  'typeorm';
+import { IUserCreate } from './user.type';
 
 @Injectable()
 export class UserService {
@@ -20,7 +21,7 @@ export class UserService {
     }
 
 
-    async create (user: User): Promise<User> {
+    async create (user: IUserCreate): Promise<User> {
         return await this.UserRepo.save(user)
     }
 
@@ -30,6 +31,10 @@ export class UserService {
 
     async delete(id: number): Promise<DeleteResult> {
         return await this.UserRepo.delete(id);
+    }
+
+    async checkLogin(username: string, password: string): Promise<User> {
+        return await this.UserRepo.findOne({where: {username: username, password: password}})
     }
 
     async findByUsername(username: string): Promise<User> {

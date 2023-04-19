@@ -15,6 +15,12 @@ export class ShoeService {
     async findAll(): Promise<Shoe[]> {
         return await this.ShoeRepo.find();
     }
+
+    async findAllWithShoeBill(): Promise<Shoe[]>{
+        return await this.ShoeRepo.find({
+            relations: ['shoebills']
+        })
+    }
     
     async findById(id: number): Promise<Shoe> {
         return await this.ShoeRepo.findOne({where: {id: id}})

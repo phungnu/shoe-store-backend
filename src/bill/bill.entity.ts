@@ -11,9 +11,6 @@ export class Bill {
     message: string
 
     @Column()
-    cost: number
-
-    @Column()
     address: string
 
     @ManyToOne(() => Customer, customer => customer.bills)

@@ -9,8 +9,8 @@ export class ICreateBill {
     message: string
 
     @ApiProperty()
-    customer: ICreateCustomer
+    customerInfo: ICreateCustomer
 
     @ApiProperty()
-    shoeIds: number[]
+    shoeBills: {shoeId: number, quantity: number}[]
 }

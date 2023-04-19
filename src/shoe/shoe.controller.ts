@@ -47,6 +47,18 @@ export class ShoeController {
         }
     }
 
+    @Get('/getAllWithShoeBill')
+    async getAllWithShoebill(): Promise<any>{
+        try{
+            const listShoe = await this.shoeService.findAllWithShoeBill();
+            if (listShoe==null)
+                return failResponse('Shoe is not found', 'ShoeNotFound');
+            return successResponse(listShoe);
+        }catch(error){
+            return failResponse('Execute service went wrong', 'ServiceException')
+        }
+    }
+
     @Put('/update/{id}')
     async updateShoe(@Param('id') id:number, @Body() input: IUpdateShoe): Promise<any>{
         try{

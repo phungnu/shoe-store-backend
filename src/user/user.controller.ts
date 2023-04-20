@@ -44,7 +44,6 @@ export class UserController {
             const data: IUserCreate = {
                 username: input.username,
                 password: input.password,
-                createAt: Date.now().toLocaleString()
             }
             const res = await this.userService.create(data)
             return successResponse(res);

@@ -13,7 +13,7 @@ export class User {
     password: string;
 
     @Column()
-    createAt: string;
+    createAt: Date = new Date(Date.now());
 
     @OneToMany(() => Shoe, shoe => shoe.user)
     shoes: Shoe[]

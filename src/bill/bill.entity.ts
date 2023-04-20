@@ -13,6 +13,9 @@ export class Bill {
     @Column()
     address: string
 
+    @Column()
+    createAt: Date = new Date(Date.now())
+
     @ManyToOne(() => Customer, customer => customer.bills)
     @JoinColumn({name: 'customer_id'})
     customer: Customer

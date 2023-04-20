@@ -12,6 +12,12 @@ export class ICreateShoe {
 
     @ApiProperty()
     imageUrl: string
+
+    @ApiProperty()
+    userId: number
+
+    @ApiProperty()
+    quantity: number
 }
 
 export class IUpdateShoe {
@@ -26,6 +32,9 @@ export class IUpdateShoe {
 
     @ApiProperty()
     imageUrl?: string
+
+    @ApiProperty()
+    quantity?: number
 }
 
 export interface ShoeDTO {
@@ -33,5 +42,6 @@ export interface ShoeDTO {
     name: string,
     description: string,
     imageUrl: string,
-    price: number
+    price: number,
+    quantity: number
 }

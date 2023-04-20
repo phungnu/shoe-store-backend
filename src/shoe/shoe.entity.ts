@@ -1,5 +1,6 @@
 import { ShoeBill } from "src/shoebill/shoebill.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user/user.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: "shoes"})
 export class Shoe {
@@ -18,6 +19,13 @@ export class Shoe {
     @Column()
     imageUrl: string
 
+    @Column()
+    quantity: number
+
     @OneToMany(() => ShoeBill, shoebill => shoebill.shoe)
     shoebills: ShoeBill[]
+
+    @ManyToOne(() => User, user => user.shoes)
+    @JoinColumn({ name: 'user_id'})
+    user: User
 }

@@ -12,5 +12,6 @@ import { ShoeModule } from 'src/shoe/shoe.module';
 	],
 	providers: [ShoebillService],
 	controllers: [ShoebillController],
+	exports: [TypeOrmModule.forFeature([ShoeBill])],
 })
 export class ShoebillModule {}

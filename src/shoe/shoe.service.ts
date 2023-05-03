@@ -25,8 +25,16 @@ export class ShoeService {
         })
     }
     
-    async findById(id: number): Promise<Shoe> {
-        return await this.ShoeRepo.findOne({where: {id: id}});
+    async findById(id: number): Promise<any> {
+        return await this.ShoeRepo.findOne({
+            select: {
+                id: true,
+                name: true
+            },
+            where: {
+                id: id,
+            }
+        });
     }
 
     async create(shoe: ICreateShoe): Promise<Shoe> {

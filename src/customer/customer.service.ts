@@ -17,10 +17,10 @@ export class CustomerService {
     }
 
     async findById(id: number): Promise<Customer>{
-        return await this.customerRepo.findOne({
+        return await this.customerRepo.find({
             where: {id: id},
-            relations: ['bills', 'bills.shoebills', 'shoebills.shoe']
-        });
+            relations: ['bills', 'bills.shoebills', 'bills.shoebills.shoe']
+        })[0];
     }
 
     async findByPhone(phone: string): Promise<Customer>{
@@ -38,64 +38,8 @@ export class CustomerService {
 
     async findAll(): Promise<Customer[]> {
         return await this.customerRepo.find({
-            relations: ['bills', 'bills.shoebills', 'shoebills.shoe']
+            relations: ['bills', 'bills.shoebills', 'bills.shoebills.shoe']
         })
     }
 
-    // cach khac de getAllcustomer co link den cac bang khac
-
-    // const queryBuilder = this.entityManager.createQueryBuilder();
-    // queryBuilder
-    //     .select('customer.id', 'customerId')
-    //     .addSelect('customer.name', 'customerName')
-    //     .addSelect('bill.id', 'billId')
-    //     .addSelect('bill.totalAmount', 'billTotalAmount')
-    //     .addSelect('shoe.id', 'shoeId')
-    //     .addSelect('shoe.name', 'shoeName')
-    //     .addSelect('shoebill.quantity', 'shoeQuantity')
-    //     .from('customer', 'customer')
-    //     .leftJoin('customer.bills', 'bill')
-    //     .leftJoin('bill.shoeBills', 'shoebill')
-    //     .leftJoin('shoebill.shoe', 'shoe')
-    //     .orderBy('customer.name', 'ASC')
-    //     .addOrderBy('bill.totalAmount', 'DESC');
-
-    // const result = await queryBuilder.getRawMany();
-    // const customers = result.reduce((acc: Customer[], row: any) => {
-    //     const customer = acc.find((c) => c.id === row.customerId);
-    //     if (!customer) {
-    //         acc.push({
-    //         id: row.customerId,
-    //         name: row.customerName,
-    //         bills: [],
-    //         });
-    //     }
-
-    //     const bill = customer?.bills.find((b) => b.id === row.billId);
-    //     if (!bill) {
-    //         customer?.bills.push({
-    //         id: row.billId,
-    //         totalAmount: row.billTotalAmount,
-    //         shoeBills: [],
-    //         });
-    //     }
-
-    //     const shoeBill = bill?.shoeBills.find((sb) => sb.shoe.id === row.shoeId);
-    //     if (!shoeBill) {
-    //         bill?.shoeBills.push({
-    //         quantity: row.shoeQuantity,
-    //         shoe: {
-    //             id: row.shoeId,
-    //             name: row.shoeName,
-    //         },
-    //         });
-    //     } else {
-    //         shoeBill.quantity += row.shoeQuantity;
-    //     }
-
-    //     return acc;
-    //     }, []);
-
-    //     return customers;
-    // }
 }

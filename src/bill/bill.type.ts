@@ -12,5 +12,13 @@ export class ICreateBill {
     customerInfo: ICreateCustomer
 
     @ApiProperty()
-    shoeBills: {shoeId: number, quantity: number}[]
+    shoeBills: ShoeBillCreate[]
+}
+
+class ShoeBillCreate {
+    @ApiProperty()
+    quantity: number
+
+    @ApiProperty()
+    shoeId: number
 }

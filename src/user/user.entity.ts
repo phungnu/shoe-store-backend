@@ -12,9 +12,6 @@ export class User {
     @Column('text')
     password: string;
 
-    @Column()
-    createAt: Date = new Date(Date.now());
-
     @OneToMany(() => Shoe, shoe => shoe.user)
     shoes: Shoe[]
 }

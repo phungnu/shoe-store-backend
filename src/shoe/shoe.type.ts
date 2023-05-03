@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { User } from "src/user/user.entity";
 
 export class ICreateShoe {
     @ApiProperty()
@@ -44,4 +45,13 @@ export interface ShoeDTO {
     imageUrl: string,
     price: number,
     quantity: number
+}
+
+export interface ShoeDTOCreate {
+    name: string,
+    description: string,
+    imageUrl: string,
+    price: number,
+    quantity: number,
+    user: User
 }

@@ -41,5 +41,5 @@ export interface IUserRes {
 
 export interface IUserCreate {
     username: string,
-    password: string
+    password: string,
 }

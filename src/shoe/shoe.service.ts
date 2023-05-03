@@ -2,18 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Shoe } from './shoe.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { ICreateShoe, IUpdateShoe } from './shoe.type';
+import { ICreateShoe, IUpdateShoe, ShoeDTO, ShoeDTOCreate } from './shoe.type';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class ShoeService {
 
     constructor(
-        @InjectRepository(Shoe)
-        private readonly ShoeRepo: Repository<Shoe>
+        @InjectRepository(Shoe) private readonly ShoeRepo: Repository<Shoe>,
+        @InjectRepository(User) private readonly UserRepo: Repository<User>
     ) {}
 
     async findAll(): Promise<Shoe[]> {
-        return await this.ShoeRepo.find();
+        return await this.ShoeRepo.find({
+            relations: ['user']
+        });
     }
 
     async findAllWithShoeBill(): Promise<Shoe[]>{
@@ -23,11 +26,20 @@ export class ShoeService {
     }
     
     async findById(id: number): Promise<Shoe> {
-        return await this.ShoeRepo.findOne({where: {id: id}})
+        return await this.ShoeRepo.findOne({where: {id: id}});
     }
 
     async create(shoe: ICreateShoe): Promise<Shoe> {
-        return await this.ShoeRepo.save(shoe);
+        const user = await this.UserRepo.findOne({where: {id: shoe.userId}});
+        const shoeDTO: ShoeDTOCreate = {
+            name: shoe.name,
+            description: shoe.description,
+            price: shoe.price,
+            quantity: shoe.quantity,
+            imageUrl: shoe.imageUrl,
+            user: user
+        }
+        return await this.ShoeRepo.save(shoeDTO);
     }
 
     async update(id: number, shoe: IUpdateShoe): Promise<UpdateResult> {

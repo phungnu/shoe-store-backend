@@ -23,6 +23,9 @@ export class ICreateShoe {
 
 export class IUpdateShoe {
     @ApiProperty()
+    id: number
+
+    @ApiProperty()
     name?: string
 
     @ApiProperty()
@@ -54,4 +57,9 @@ export interface ShoeDTOCreate {
     price: number,
     quantity: number,
     user: User
+}
+
+export class ShoeID {
+    @ApiProperty()
+    id: number
 }

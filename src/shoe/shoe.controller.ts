@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ShoeService } from './shoe.service';
-import { ICreateShoe, IUpdateShoe } from './shoe.type';
+import { ICreateShoe, IUpdateShoe, ShoeID } from './shoe.type';
 import { failResponse, successResponse } from 'src/utils/http';
 
 @Controller('shoe')
@@ -35,10 +35,11 @@ export class ShoeController {
         }
     }
 
-    @Get('/{id}')
-    async getById(@Param('id') id: number): Promise<any>{
+    @Post('/getInfo')
+    async getById(@Body() input: ShoeID): Promise<any>{
         try{
-            const shoe = await this.shoeService.findById(id);
+            const shoe = await this.shoeService.findById(input.id);
+            console.log(shoe)
             if (shoe==null)
                 return failResponse('Shoe is not found', 'ShoeNotFound');
             return successResponse(shoe);
@@ -59,13 +60,13 @@ export class ShoeController {
         }
     }
 
-    @Put('/update/{id}')
-    async updateShoe(@Param('id') id:number, @Body() input: IUpdateShoe): Promise<any>{
+    @Put('/update')
+    async updateShoe(@Body() input: IUpdateShoe): Promise<any>{
         try{
-            const shoe = await this.shoeService.findById(id);
+            const shoe = await this.shoeService.findById(input.id);
             if (shoe==null)
                 return failResponse('Shoe is not found', 'ShoeNotFound');
-            const shoeUpdate = await this.shoeService.update(id, input);
+            const shoeUpdate = await this.shoeService.update(input.id, input);
             if (shoeUpdate==null)
                 return failResponse('Execute service went wrong', 'UpdateFail');
             return successResponse(shoeUpdate);

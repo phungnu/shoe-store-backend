@@ -60,7 +60,7 @@ export class ShoeController {
         }
     }
 
-    @Put('/update')
+    @Post('/update')
     async updateShoe(@Body() input: IUpdateShoe): Promise<any>{
         try{
             const shoe = await this.shoeService.findById(input.id);
@@ -75,13 +75,13 @@ export class ShoeController {
         }
     }
 
-    @Delete('/delete/{id}')
-    async deleteShoe(@Param('id') id: number): Promise<any>{
+    @Post('/delete')
+    async deleteShoe(@Body() input: ShoeID): Promise<any>{
         try{
-            const shoe = await this.shoeService.findById(id);
+            const shoe = await this.shoeService.findById(input.id);
             if (shoe==null)
                 return failResponse('Shoe is not found', 'ShoeNotFound')
-            const shoeDelete = await this.shoeService.delete(id);
+            const shoeDelete = await this.shoeService.delete(input.id);
             if (shoeDelete==null)
                 return failResponse('Excute service went wrong', 'DeleteFail');
             return successResponse(shoeDelete);

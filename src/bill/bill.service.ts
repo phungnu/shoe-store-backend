@@ -50,7 +50,8 @@ export class BillService {
         for ( const shoebillReq of input.shoeBills ) {
             const shoe = await this.shoeRepo.findOne({where: {id: shoebillReq.shoeId}, relations: ['user']});
             const shoebill = this.shoeBillRepo.create({
-                quantity: shoebillReq.quantity,
+                amount: shoebillReq.amount,
+                size: shoebillReq.size,
                 bill,
                 shoe
             })

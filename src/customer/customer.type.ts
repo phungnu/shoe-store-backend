@@ -10,3 +10,8 @@ export class ICreateCustomer {
     @ApiProperty()
     email: string
 }
+
+export class IPhone {
+    @ApiProperty()
+    phone: string
+}

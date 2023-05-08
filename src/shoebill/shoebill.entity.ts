@@ -8,7 +8,10 @@ export class ShoeBill {
     id: number
 
     @Column()
-    quantity: number
+    amount: number
+
+    @Column()
+    size: number
 
     @ManyToOne(() => Bill, bill => bill.shoebills)
     @JoinColumn({ name: 'bill_id'})

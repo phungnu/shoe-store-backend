@@ -17,7 +17,10 @@ export class ICreateBill {
 
 class ShoeBillCreate {
     @ApiProperty()
-    quantity: number
+    amount: number
+
+    @ApiProperty()
+    size: number
 
     @ApiProperty()
     shoeId: number

@@ -2,7 +2,7 @@ import { Controller, Param, Get, Post, Body } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BillService } from './bill.service';
 import { failResponse, successResponse } from 'src/utils/http';
-import { ICreateBill } from './bill.type';
+import { ICreateBill, IdCustomer } from './bill.type';
 
 @Controller('bill')
 @ApiTags('Bills')
@@ -22,10 +22,10 @@ export class BillController {
         }
     }
 
-    @Get('/customer/{id}')
-    async findByCustomer(@Param('id') customerId: number): Promise<any>{
+    @Post('/customer')
+    async findByCustomer(@Body() input: IdCustomer): Promise<any>{
         try{    
-            const listBill = await this.billService.findByCustomer(customerId);
+            const listBill = await this.billService.findByCustomer(input.customerId);
             if (listBill==null) 
                 return failResponse('Bill is not found', 'BillNotFound');
             return successResponse(listBill);

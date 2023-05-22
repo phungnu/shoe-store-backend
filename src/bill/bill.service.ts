@@ -30,7 +30,8 @@ export class BillService {
         return this.billRepo.find({
             where: {
                 customer: {id: customerId}
-            }
+            },
+            relations: ['shoebills', 'shoebills.shoe']
         })
     }
 
@@ -56,6 +57,7 @@ export class BillService {
                 shoe
             })
             await this.shoeBillRepo.save(shoebill)
+            await this.shoeRepo.update(shoe.id, {quantity: shoe.quantity - shoebillReq.amount})
         }
 
         return bill;

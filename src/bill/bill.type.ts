@@ -25,3 +25,8 @@ class ShoeBillCreate {
     @ApiProperty()
     shoeId: number
 }
+
+export class IdCustomer {
+    @ApiProperty()
+    customerId: number
+}

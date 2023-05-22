@@ -7,13 +7,13 @@ export class Shoe {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column("longtext")
     name: string
 
     @Column()
     price: number
 
-    @Column()
+    @Column("longtext")
     description: string
 
     @Column()

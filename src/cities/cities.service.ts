@@ -4,7 +4,7 @@ import * as fs from 'fs';
 
 @Injectable()
 export class CitiesService {
-    private readonly citiesFilePath = path.resolve(__dirname, 'data/cities.json');
+    private readonly citiesFilePath = path.resolve(__dirname, '../src/cities/data/cities.json');
 
     getCities(){
         return this.readFile(this.citiesFilePath);
@@ -12,14 +12,14 @@ export class CitiesService {
 
     getDistrictsByCityId(cityId: string){
         const cities = this.readFile(this.citiesFilePath);
-        const city = cities.find(city => city.id === cityId);
+        const city = cities.find(item => item.id == cityId);
         return city ? city.districts : [];
     }
 
     getCommunesByDistrictId(cityId: string, districtId: string) {
         const cities = this.readFile(this.citiesFilePath);
         const city = cities.find(city => city.id === cityId);
-        const district = city ? city.districts.find(district => district.id === districtId) : null;
+        const district = city ? city.districts.find(district => district.id == districtId) : null;
         return district ? district.communes : [];
     }
 

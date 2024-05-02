@@ -1,0 +1,29 @@
+[
+    {
+      "id": "01",
+      "name": "Hà Nội",
+      "districts": [
+        {
+          "id": "10",
+          "name": "Thạch Thất",
+          "communes": [
+            {"id": "1", "name": "Thị trấn Liên Quan"},
+            {"id": "2", "name": "Thị trấn Thạch Hoà"},
+            {"id": "3", "name": "Thị trấn Kim Quan"},
+            {"id": "4", "name": "Xã Bình Yên"},
+            {"id": "5", "name": "Xã Bình Phú"},
+            {"id": "6", "name": "Xã Cẩm Yên"},
+            {"id": "7", "name": "Xã Đại Đồng"},
+            {"id": "8", "name": "Xã Hương Ngải"},
+            {"id": "9", "name": "Xã Liên Hà"},
+            {"id": "10", "name": "Xã Phùng Xá"},
+            {"id": "11", "name": "Xã Phú Kim"},
+            {"id": "12", "name": "Xã Tiến Xuân"},
+            {"id": "13", "name": "Xã Yên Bình"},
+            {"id": "14", "name": "Xã Yên Trung"}
+          ]
+        }
+      ]
+    }
+]
+  

@@ -14,6 +14,7 @@ import { ShoeBill } from './shoebill/shoebill.entity';
 import { Bill } from './bill/bill.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth/auth.service';
+import { CitiesModule } from './cities/cities.module';
 
 @Module({
 	imports: [
@@ -36,7 +37,8 @@ import { AuthService } from './auth/auth.service';
 		ShoeModule,
 		BillModule,
 		CustomerModule,
-		ShoebillModule
+		ShoebillModule,
+		CitiesModule
 	],
 	controllers: [
 		AppController

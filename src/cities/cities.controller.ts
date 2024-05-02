@@ -19,8 +19,8 @@ export class CitiesController {
         return this.citiesService.getDistrictsByCityId(cityId);
     }
 
-    @Get('/:cityId/districts/:districtId/communes')
-    getCommunesByDistrictId(@Param('cityId') cityId, @Param('districtId') districtId) {
-        return this.citiesService.getCommunesByDistrictId(cityId, districtId);
+    @Get('/districts/:districtId/communes')
+    getCommunesByDistrictId(@Param('districtId') districtId) {
+        return this.citiesService.getCommunesByDistrictId(districtId);
     }
 }

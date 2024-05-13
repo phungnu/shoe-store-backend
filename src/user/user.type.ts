@@ -10,6 +10,12 @@ export class IRegister {
 
     @ApiProperty()
     confirmPassword: string
+
+    @ApiProperty()
+    phone: string
+    
+    @ApiProperty()
+    address: string
 }
 
 export interface IUserDTO {
@@ -42,4 +48,6 @@ export interface IUserRes {
 export interface IUserCreate {
     username: string,
     password: string,
+    phone: string,
+    address: string
 }

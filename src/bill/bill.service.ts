@@ -3,22 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Bill } from './bill.entity';
 import { Repository } from 'typeorm';
 import { ICreateBill } from './bill.type';
-import { Customer } from 'src/customer/customer.entity';
 import { Shoe } from 'src/shoe/shoe.entity';
 import { ShoeBill } from 'src/shoebill/shoebill.entity';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class BillService {
     constructor(
         @InjectRepository(Bill) private readonly billRepo: Repository<Bill>,
-        @InjectRepository(Customer) private readonly customerRepo: Repository<Customer>,
         @InjectRepository(Shoe) private readonly shoeRepo: Repository<Shoe>,
         @InjectRepository(ShoeBill) private readonly shoeBillRepo: Repository<ShoeBill>,
+        @InjectRepository(User) private readonly userRepo: Repository<User>,
     ){}
 
     async findAll(): Promise<Bill[]> {
         return await this.billRepo.find({
-            relations: ['customer', 'shoebills', 'shoebills.shoe']
+            relations: ['shoebills', 'shoebills.shoe']
         });
     }
 
@@ -26,40 +26,23 @@ export class BillService {
         return await this.billRepo.findOne({where: {id: id}})
     }
 
-    async findByCustomer(customerId: number): Promise<Bill[]>{
-        return this.billRepo.find({
-            where: {
-                customer: {id: customerId}
-            },
-            relations: ['shoebills', 'shoebills.shoe']
-        })
-    }
-
     async createBill(input: ICreateBill): Promise<any>{
-        let customer = await this.customerRepo.findOne({where: {phone: input.customerInfo.phone}})
-        if ( customer==null )
-            await this.customerRepo.save(input.customerInfo);
-        customer = await this.customerRepo.findOne({where: {phone: input.customerInfo.phone}});
-
-        const bill = this.billRepo.create({
-            address: input.address,
-            message: input.message,
-            customer
-        });
-        await this.billRepo.save(bill);
-
-        for ( const shoebillReq of input.shoeBills ) {
-            const shoe = await this.shoeRepo.findOne({where: {id: shoebillReq.shoeId}, relations: ['user']});
-            const shoebill = this.shoeBillRepo.create({
-                amount: shoebillReq.amount,
-                size: shoebillReq.size,
-                bill,
-                shoe
-            })
-            await this.shoeBillRepo.save(shoebill)
-            await this.shoeRepo.update(shoe.id, {quantity: shoe.quantity - shoebillReq.amount})
+        try {
+            let user = await this.userRepo.findOne({where: {id: input.userId}})
+            const bill = this.billRepo.create({
+                user: user,
+            });
+            const billAns = await this.billRepo.save(bill);
+    
+            for ( const bookbillReq of input.shoeBills ) {
+                const bookbill = await this.shoeBillRepo.findOne({where: {id: bookbillReq}, relations: ['book']});
+                await this.shoeBillRepo.update(bookbill.id, {bill: billAns})
+                await this.shoeRepo.update(bookbill.book.id, {sold: bookbill.book.sold + bookbill.amount})
+            }
+            return billAns;
+        } catch(err) {
+            console.log(err)
         }
-
-        return bill;
+        
     }
 }

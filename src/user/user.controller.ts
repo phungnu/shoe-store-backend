@@ -44,6 +44,8 @@ export class UserController {
             const data: IUserCreate = {
                 username: input.username,
                 password: input.password,
+                phone: input.phone,
+                address: input.address
             }
             const res = await this.userService.create(data)
             return successResponse(res);

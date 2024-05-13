@@ -6,9 +6,7 @@ import { User } from './user/user.entity';
 import { UserModule } from './user/user.module';
 import { ShoeModule } from './shoe/shoe.module';
 import { BillModule } from './bill/bill.module';
-import { CustomerModule } from './customer/customer.module';
 import { ShoebillModule } from './shoebill/shoebill.module';
-import { Customer } from './customer/customer.entity';
 import { Shoe } from './shoe/shoe.entity';
 import { ShoeBill } from './shoebill/shoebill.entity';
 import { Bill } from './bill/bill.entity';
@@ -24,7 +22,7 @@ import { CitiesModule } from './cities/cities.module';
 			username: 'root',
 			password: 'root',
 			database: 'thuctapcoso',
-			entities: [Customer, User, Shoe, ShoeBill, Bill],
+			entities: [User, Shoe, ShoeBill, Bill],
 			synchronize: true,
 		}),
 		JwtModule.register({
@@ -36,7 +34,6 @@ import { CitiesModule } from './cities/cities.module';
 		UserModule,
 		ShoeModule,
 		BillModule,
-		CustomerModule,
 		ShoebillModule,
 		CitiesModule
 	],

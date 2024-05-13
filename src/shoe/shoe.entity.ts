@@ -28,4 +28,5 @@ export class Shoe {
     @ManyToOne(() => User, user => user.shoes)
     @JoinColumn({ name: 'user_id'})
     user: User
+    
 }

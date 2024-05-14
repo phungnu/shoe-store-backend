@@ -6492,18 +6492,6 @@
         "isDeleted": false
     },
     {
-        "_id": "60eaaa6f1173335842c35587",
-        "name": "Vũng Tàu",
-        "type": "thanh-pho",
-        "slug": "vung-tau",
-        "name_with_type": "Thành phố Vũng Tàu",
-        "path": "Vũng Tàu, Bà Rịa - Vũng Tàu",
-        "path_with_type": "Thành phố Vũng Tàu, Tỉnh Bà Rịa - Vũng Tàu",
-        "code": "747",
-        "parent_code": "77",
-        "isDeleted": false
-    },
-    {
         "_id": "60eaaa6f1173335842c35588",
         "name": "Bà Rịa",
         "type": "thanh-pho",

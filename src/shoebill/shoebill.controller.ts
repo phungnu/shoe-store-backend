@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { ShoebillService } from './shoebill.service';
 import { ICreateShoeBill } from './shoebill.type';
 import { successResponse, failResponse } from 'src/utils/http';
-import { IDInteface } from 'src/type';
+import { AmountInteface, IDInteface } from 'src/type';
 
 @Controller('shoebill')
 @ApiTags('ShoeBills')
@@ -16,7 +16,7 @@ export class ShoebillController {
     @Post('/create')
     async create(@Body() input: ICreateShoeBill): Promise<any> {
         try{    
-            const checkExist = await this.shoeBillService.findByUserShoe(input.userId, input.shoeId);
+            const checkExist = await this.shoeBillService.findByUserShoe(input.userId, input.shoeId, input.size);
             if ( checkExist.length>0 ) {
                 for ( const shoebill of checkExist ) {
                     if(shoebill.bill==null) {
@@ -65,6 +65,19 @@ export class ShoebillController {
             if (shoebill==null)
                 return failResponse('Shoebill not found', 'NotFound');
             const res = await this.shoeBillService.delete(input.id);
+            return successResponse(res);
+        }catch(error){
+            return failResponse('Execute service went wrong', 'ServiceException');
+        }
+    }
+
+    @Post('/changeAmount')
+    async changeAmount(@Body() input: AmountInteface): Promise<any>{
+        try{    
+            const shoebill = await this.shoeBillService.findById(input.id);
+            if (shoebill==null)
+                return failResponse('Shoebill not found', 'NotFound');
+            const res = await this.shoeBillService.changeAmount(input.id, input.action);
             return successResponse(res);
         }catch(error){
             return failResponse('Execute service went wrong', 'ServiceException');

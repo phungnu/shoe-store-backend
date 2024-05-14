@@ -16,6 +16,9 @@ export class IRegister {
     
     @ApiProperty()
     address: string
+
+    @ApiProperty()
+    name: string
 }
 
 export interface IUserDTO {
@@ -49,5 +52,7 @@ export interface IUserCreate {
     username: string,
     password: string,
     phone: string,
-    address: string
+    address: string,
+    name: string,
+    role: string
 }

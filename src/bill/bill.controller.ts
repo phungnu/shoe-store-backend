@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { BillService } from './bill.service';
 import { failResponse, successResponse } from 'src/utils/http';
 import { ICreateBill } from './bill.type';
-import { IDInteface } from 'src/type';
+import { IDInteface, StatusInterface } from 'src/type';
 
 @Controller('bill')
 @ApiTags('Bills')
@@ -42,6 +42,19 @@ export class BillController {
             if (listBill==null)
                 return failResponse('Bill is not found', 'BillNotFound');
             return successResponse(listBill);
+        }catch(error){
+            return failResponse('Execute service went wrong', 'ServiceException');
+        }
+    }
+
+    @Post('/updateStatus')
+    async changeAmount(@Body() input: StatusInterface): Promise<any>{
+        try{    
+            const bill = await this.billService.findById(input.id);
+            if (bill==null)
+                return failResponse('Shoebill not found', 'NotFound');
+            const res = await this.billService.updateStatus(input.id, input.status);
+            return successResponse(res);
         }catch(error){
             return failResponse('Execute service went wrong', 'ServiceException');
         }

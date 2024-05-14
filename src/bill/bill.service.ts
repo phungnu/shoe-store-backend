@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Bill } from './bill.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { ICreateBill } from './bill.type';
 import { Shoe } from 'src/shoe/shoe.entity';
 import { ShoeBill } from 'src/shoebill/shoebill.entity';
@@ -31,7 +31,7 @@ export class BillService {
             where: {
                 user: {id: userId}
             },
-            relations: ['user', 'shoebills', 'shoebills.shoe', 'shoebills.shoe.category']
+            relations: ['user', 'shoebills', 'shoebills.shoe']
         })
     }
 
@@ -40,18 +40,33 @@ export class BillService {
             let user = await this.userRepo.findOne({where: {id: input.userId}})
             const bill = this.billRepo.create({
                 user: user,
+                status: 0,
+                message: input.message,
+                address: input.address
             });
             const billAns = await this.billRepo.save(bill);
     
             for ( const shoebillReq of input.shoeBills ) {
-                const shoebill = await this.shoeBillRepo.findOne({where: {id: shoebillReq.shoeId}, relations: ['shoe']});
-                // await this.shoeBillRepo.update(shoebill.id, {bill: billAns})
-                // await this.shoeRepo.update(shoebill.shoe.id, {sold: shoebill.shoe.sold + shoebill.amount})
+                const shoebill = await this.shoeBillRepo.findOne({where: {id: shoebillReq}, relations: ['shoe']});
+                await this.shoeBillRepo.update(shoebill.id, {bill: billAns})
+                await this.shoeRepo.update(shoebill.shoe.id, {quantity: shoebill.shoe.quantity - shoebill.amount})
             }
             return billAns;
         } catch(err) {
             console.log(err)
         }
         
+    }
+
+    async updateStatus(id: number, status: number):  Promise<UpdateResult> {
+        try {
+            const bill = await this.billRepo.findOne({where: {id: id}});
+            var infoUpdate = {
+                status: status
+            }
+            return await this.billRepo.update(id, infoUpdate);
+        } catch(err){
+            console.log(err)
+        }
     }
 }

@@ -15,10 +15,16 @@ export class User {
     password: string;
 
     @Column('text')
+    name: string
+
+    @Column('text')
     phone: string;
 
     @Column('text')
     address: string;
+
+    @Column('text')
+    role: string;
 
     @OneToMany(() => Shoe, shoe => shoe.user)
     shoes: Shoe[]

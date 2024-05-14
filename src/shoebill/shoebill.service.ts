@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ShoeBill } from './shoebill.entity';
-import { Repository, DeleteResult } from 'typeorm';
+import { Repository, DeleteResult, UpdateResult } from 'typeorm';
 import { ICreateShoeBill, IShoeDTO } from './shoebill.type';
 import { Shoe } from 'src/shoe/shoe.entity';
 import { User } from 'src/user/user.entity';
@@ -19,6 +19,7 @@ export class ShoebillService {
         const user = await this.userRepo.findOne({where: {id: input.userId}});
         const shoeBill: IShoeDTO = {
             amount: input.amount,
+            size: input.size,
             shoe: shoe,
             user: user
         }
@@ -69,9 +70,10 @@ export class ShoebillService {
         });
     }
 
-    async findByUserShoe(userId: number, shoeId: number): Promise<ShoeBill[]> {
+    async findByUserShoe(userId: number, shoeId: number, size: number): Promise<ShoeBill[]> {
         return await this.shoeBillRepo.find({
             where: {
+                size: size,
                 user: {id: userId},
                 shoe: {id: shoeId}
             },
@@ -102,6 +104,23 @@ export class ShoebillService {
         }catch(err) {
             console.log(err)
         } 
+    }
+
+    async changeAmount(id: number, action: string):  Promise<UpdateResult> {
+        try {
+            const shoebill = await this.shoeBillRepo.findOne({where: {id: id}});
+            var infoUpdate = {
+                amount: 0
+            }
+            if ( action == 'plus' ) {
+                infoUpdate.amount = shoebill.amount + 1;
+            } else {
+                infoUpdate.amount = shoebill.amount - 1;
+            }
+            return await this.shoeBillRepo.update(id, infoUpdate);
+        } catch(err){
+            console.log(err)
+        }
     }
 
 }

@@ -10,11 +10,15 @@ export class ICreateShoeBill {
     shoeId: number
 
     @ApiProperty()
+    size: number
+
+    @ApiProperty()
     userId: number
 }
 
 export interface IShoeDTO {
     amount: number,
+    size: number,
     shoe: Shoe,
     user: User
 }

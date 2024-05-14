@@ -45,7 +45,9 @@ export class UserController {
                 username: input.username,
                 password: input.password,
                 phone: input.phone,
-                address: input.address
+                address: input.address,
+                name: input.name,
+                role: "USER"
             }
             const res = await this.userService.create(data)
             return successResponse(res);

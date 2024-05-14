@@ -8,6 +8,9 @@ export class Bill {
     id: number
 
     @Column()
+    address: string
+
+    @Column()
     message: string
 
     @Column()

@@ -1,5 +1,4 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ICreateCustomer } from "src/customer/customer.type";
 
 export class ICreateBill {
     @ApiProperty()
@@ -9,7 +8,7 @@ export class ICreateBill {
     message: string
 
     @ApiProperty()
-    customerInfo: ICreateCustomer
+    userId: number
 
     @ApiProperty()
     shoeBills: ShoeBillCreate[]
@@ -24,9 +23,4 @@ class ShoeBillCreate {
 
     @ApiProperty()
     shoeId: number
-}
-
-export class IdCustomer {
-    @ApiProperty()
-    customerId: number
 }

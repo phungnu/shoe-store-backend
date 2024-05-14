@@ -6,14 +6,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ShoebillService } from 'src/shoebill/shoebill.service';
 import { ShoeModule } from 'src/shoe/shoe.module';
 import { ShoebillModule } from 'src/shoebill/shoebill.module';
-import { CustomerModule } from 'src/customer/customer.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([Bill]),
 		ShoeModule,
 		ShoebillModule,
-		CustomerModule
+		UserModule
 	],
 	exports: [TypeOrmModule.forFeature([Bill])],
 	controllers: [BillController],

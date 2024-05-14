@@ -19,7 +19,7 @@ export class ShoeBill {
     user: User
 
     @ManyToOne(() => Shoe, shoe => shoe.shoebills)
-    @JoinColumn({ name: 'book_id'})
+    @JoinColumn({ name: 'shoe_id'})
     shoe: Shoe
 
     @ManyToOne(() => Bill, bill => bill.shoebills)

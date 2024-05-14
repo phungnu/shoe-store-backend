@@ -18,12 +18,21 @@ export class BillService {
 
     async findAll(): Promise<Bill[]> {
         return await this.billRepo.find({
-            relations: ['shoebills', 'shoebills.shoe']
+            relations: ['user', 'shoebills', 'shoebills.shoe']
         });
     }
 
     async findById(id: number): Promise<Bill>{
         return await this.billRepo.findOne({where: {id: id}})
+    }
+
+    async findByUser(userId: number): Promise<Bill[]>{
+        return this.billRepo.find({
+            where: {
+                user: {id: userId}
+            },
+            relations: ['user', 'shoebills', 'shoebills.shoe', 'shoebills.shoe.category']
+        })
     }
 
     async createBill(input: ICreateBill): Promise<any>{
@@ -34,10 +43,10 @@ export class BillService {
             });
             const billAns = await this.billRepo.save(bill);
     
-            for ( const bookbillReq of input.shoeBills ) {
-                const bookbill = await this.shoeBillRepo.findOne({where: {id: bookbillReq}, relations: ['book']});
-                await this.shoeBillRepo.update(bookbill.id, {bill: billAns})
-                await this.shoeRepo.update(bookbill.book.id, {sold: bookbill.book.sold + bookbill.amount})
+            for ( const shoebillReq of input.shoeBills ) {
+                const shoebill = await this.shoeBillRepo.findOne({where: {id: shoebillReq.shoeId}, relations: ['shoe']});
+                // await this.shoeBillRepo.update(shoebill.id, {bill: billAns})
+                // await this.shoeRepo.update(shoebill.shoe.id, {sold: shoebill.shoe.sold + shoebill.amount})
             }
             return billAns;
         } catch(err) {

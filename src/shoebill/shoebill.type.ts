@@ -1,15 +1,20 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Shoe } from "src/shoe/shoe.entity";
+import { User } from "src/user/user.entity";
 
 export class ICreateShoeBill {
     @ApiProperty()
-    quantity: number
+    amount: number
 
     @ApiProperty()
     shoeId: number
+
+    @ApiProperty()
+    userId: number
 }
 
 export interface IShoeDTO {
-    quantity: number,
-    shoe: Shoe
+    amount: number,
+    shoe: Shoe,
+    user: User
 }

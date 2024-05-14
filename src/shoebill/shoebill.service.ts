@@ -1,24 +1,107 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ShoeBill } from './shoebill.entity';
-import { Repository } from 'typeorm';
+import { Repository, DeleteResult } from 'typeorm';
 import { ICreateShoeBill, IShoeDTO } from './shoebill.type';
 import { Shoe } from 'src/shoe/shoe.entity';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class ShoebillService {
     constructor(
         @InjectRepository(ShoeBill) private readonly shoeBillRepo: Repository<ShoeBill>,
-        @InjectRepository(Shoe) private readonly shoeRepo: Repository<Shoe>
+        @InjectRepository(Shoe) private readonly shoeRepo: Repository<Shoe>,
+        @InjectRepository(User) private readonly userRepo: Repository<User>
     ){}
     
     async create(input: ICreateShoeBill): Promise<any>{
         const shoe = await this.shoeRepo.findOne({where: {id: input.shoeId}});
+        const user = await this.userRepo.findOne({where: {id: input.userId}});
         const shoeBill: IShoeDTO = {
-            quantity: input.quantity,
-            shoe: shoe
+            amount: input.amount,
+            shoe: shoe,
+            user: user
         }
         return await this.shoeBillRepo.save(shoeBill);
+    }
+
+    async updateAmount(id: number, input: ICreateShoeBill): Promise<any> {
+        const shoeBill = await this.shoeBillRepo.find({
+            where: { 
+                user: {id: input.userId}, 
+                shoe: {id: input.shoeId} 
+            },
+            relations: ['bill', 'shoe']
+        });
+        let amount = 0;
+        for ( const tmp of shoeBill ) {
+            if ( tmp.bill == null) {
+                amount = tmp.amount;
+                break;
+            }
+        }
+        return this.shoeBillRepo.update(id, {amount: amount + input.amount})
+    }
+
+    async delete(id: number): Promise<DeleteResult>{
+        const shoeBill = await this.shoeBillRepo.findOne({
+            where: {
+                id: id,
+            },
+            relations: [
+                'user', 'shoe', 'bill'
+            ]
+        });
+        // if (shoeBill!==null) {
+        //     const updateSold = await this.shoeRepo.update(shoeBill.shoe.id, {sold: shoeBill.shoe.sold - shoeBill.amount})
+        // }
+        return await this.shoeBillRepo.delete(id);
+    }
+
+    async findById(id: number): Promise<ShoeBill> {
+        return await this.shoeBillRepo.findOne({
+            where: {
+                id: id,
+            },
+            relations: [
+                'user', 'shoe'
+            ]
+        });
+    }
+
+    async findByUserShoe(userId: number, shoeId: number): Promise<ShoeBill[]> {
+        return await this.shoeBillRepo.find({
+            where: {
+                user: {id: userId},
+                shoe: {id: shoeId}
+            },
+            relations: [ 'user', 'shoe', 'bill' ]
+        })
+    }
+
+    async findByUser(userId: number): Promise<ShoeBill[]> {
+        return this.shoeBillRepo.find({
+            where: {
+                user: {id: userId}
+            },
+            relations: [
+                'user', 'shoe'
+            ]
+        })
+    }
+
+    async findByUserinCart(userId: number): Promise<ShoeBill[]> {
+        try {
+            return this.shoeBillRepo.createQueryBuilder('shoeBill')
+                                .leftJoinAndSelect('shoeBill.user', 'user')
+                                .leftJoinAndSelect('shoeBill.shoe', 'shoe')
+                                .leftJoinAndSelect('shoeBill.bill', 'bill')
+                                .where('user.id = :userId', { userId })
+                                .andWhere('bill_id IS NULL')
+                                .getMany();
+        }catch(err) {
+            console.log(err)
+        } 
     }
 
 }

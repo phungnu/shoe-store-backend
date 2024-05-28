@@ -11,6 +11,9 @@ export class Shoe {
     name: string
 
     @Column()
+    cost: number
+    
+    @Column()
     price: number
 
     @Column("longtext")

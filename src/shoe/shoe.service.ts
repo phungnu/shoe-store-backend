@@ -43,6 +43,7 @@ export class ShoeService {
             name: shoe.name,
             description: shoe.description,
             price: shoe.price,
+            cost: shoe.cost,
             quantity: shoe.quantity,
             imageUrl: shoe.imageUrl,
             user: user

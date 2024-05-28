@@ -14,7 +14,7 @@ export class ShoeController {
     @Post('/create')
     async createshoe(@Body() input: ICreateShoe): Promise<any> {
         try{
-            if (!input.name || !input.price || !input.imageUrl)
+            if (!input.name || !input.price || !input.cost || !input.imageUrl)
                 return failResponse('Cần điền đầy đủ thông tin', 'FieldIsRequired');
             const shoe = await this.shoeService.create(input);
             return successResponse(shoe);

@@ -83,35 +83,39 @@ export class BillService {
                 .getMany(),
             this.billRepo.find(),
         ]);
-    
-        const totalRevenue = allBills.reduce((sum, bill) => {
-            return sum + bill.shoebills.reduce((billSum, shoebill) => {
-                return billSum + shoebill.amount * shoebill.shoe.price;
-            }, 0);
-        }, 0);
-    
-        const profit = allBills.reduce((sum, bill) => {
-            return sum + bill.shoebills.reduce((billSum, shoebill) => {
-                return billSum + shoebill.amount * (shoebill.shoe.price - shoebill.shoe.cost);
-            }, 0);
-        }, 0);
-    
-        const totalOrders = allBills.length;
-        const successfulOrders = allBills.filter(bill => bill.status === 1).length; // Giả định status = 1 là đơn hàng thành công
+        
+        console.log(allBills);
+
+        let totalRevenue = 0, profit = 0, totalOrders = allBills.length, successfulOrders = 0, previousMonthRevenue = 0, currentMonthRevenue = 0;
+
+        for ( const bill of allBills ) {
+            if ( bill.shoebills ) {
+                for (const shoebill of bill.shoebills ) {
+                    totalRevenue += shoebill.amount * shoebill.shoe.price;
+                    profit += shoebill.amount * ( shoebill.shoe.price - shoebill.shoe.cost);
+                }
+            }
+        }
+
+        for ( const bill of previousMonthBills ) {
+            if ( bill.shoebills ) {
+                for (const shoebill of bill.shoebills ) {
+                    previousMonthRevenue += shoebill.amount * shoebill.shoe.price;
+                }
+            }
+        }
+
+        for ( const bill of currentMonthBills ) {
+            if ( bill.shoebills ) {
+                for (const shoebill of bill.shoebills ) {
+                    currentMonthRevenue += shoebill.amount * shoebill.shoe.price;
+                }
+            }
+        }
+
+        successfulOrders = allBills.filter(bill => bill.status === 1).length;
         const successRate = (successfulOrders / totalOrders) * 100;
-    
-        const previousMonthRevenue = previousMonthBills.reduce((sum, bill) => {
-            return sum + bill.shoebills.reduce((billSum, shoebill) => {
-                return billSum + shoebill.amount * shoebill.shoe.price;
-            }, 0);
-        }, 0);
-    
-        const currentMonthRevenue = currentMonthBills.reduce((sum, bill) => {
-            return sum + bill.shoebills.reduce((billSum, shoebill) => {
-                return billSum + shoebill.amount * shoebill.shoe.price;
-            }, 0);
-        }, 0);
-    
+
         const bestMonth = await this.billRepo.createQueryBuilder('bill')
           .select('MONTH(bill.createAt)', 'month')
           .addSelect('SUM(shoebill.amount * shoe.price)', 'revenue')

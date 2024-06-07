@@ -63,9 +63,11 @@ export class BillController {
     @Get('/statistics')
     async getStatistics(@Query('month') month: number, @Query('year') year: number): Promise<any> {
         try {
+            console.log(month, year);
             const stats = await this.billService.getStatistics(month, year);
             return successResponse(stats);
         } catch (error) {
+            console.log(error);
             return failResponse('Execute service went wrong', 'ServiceException');
         }
     }

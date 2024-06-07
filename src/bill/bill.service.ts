@@ -69,4 +69,80 @@ export class BillService {
             console.log(err)
         }
     }
+
+    async getStatistics(month: number, year: number): Promise<any> {
+        const previousMonth = month === 1 ? 12 : month - 1;
+        const previousMonthYear = month === 1 ? year - 1 : year;
+    
+        const [currentMonthBills, previousMonthBills, allBills] = await Promise.all([
+            this.billRepo.createQueryBuilder('bill')
+                .where('MONTH(bill.createAt) = :month AND YEAR(bill.createAt) = :year', { month, year })
+                .getMany(),
+            this.billRepo.createQueryBuilder('bill')
+                .where('MONTH(bill.createAt) = :previousMonth AND YEAR(bill.createAt) = :previousMonthYear', { previousMonth, previousMonthYear })
+                .getMany(),
+            this.billRepo.find(),
+        ]);
+    
+        const totalRevenue = allBills.reduce((sum, bill) => {
+            return sum + bill.shoebills.reduce((billSum, shoebill) => {
+                return billSum + shoebill.amount * shoebill.shoe.price;
+            }, 0);
+        }, 0);
+    
+        const profit = allBills.reduce((sum, bill) => {
+            return sum + bill.shoebills.reduce((billSum, shoebill) => {
+                return billSum + shoebill.amount * (shoebill.shoe.price - shoebill.shoe.cost);
+            }, 0);
+        }, 0);
+    
+        const totalOrders = allBills.length;
+        const successfulOrders = allBills.filter(bill => bill.status === 1).length; // Giả định status = 1 là đơn hàng thành công
+        const successRate = (successfulOrders / totalOrders) * 100;
+    
+        const previousMonthRevenue = previousMonthBills.reduce((sum, bill) => {
+            return sum + bill.shoebills.reduce((billSum, shoebill) => {
+                return billSum + shoebill.amount * shoebill.shoe.price;
+            }, 0);
+        }, 0);
+    
+        const currentMonthRevenue = currentMonthBills.reduce((sum, bill) => {
+            return sum + bill.shoebills.reduce((billSum, shoebill) => {
+                return billSum + shoebill.amount * shoebill.shoe.price;
+            }, 0);
+        }, 0);
+    
+        const bestMonth = await this.billRepo.createQueryBuilder('bill')
+          .select('MONTH(bill.createAt)', 'month')
+          .addSelect('SUM(shoebill.amount * shoe.price)', 'revenue')
+          .leftJoin('bill.shoebills', 'shoebill')
+          .leftJoin('shoebill.shoe', 'shoe')
+          .groupBy('MONTH(bill.createAt)')
+          .orderBy('revenue', 'DESC')
+          .limit(1)
+          .getRawOne();
+    
+        const growthRate = ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) * 100;
+    
+        const topProducts = await this.shoeBillRepo.createQueryBuilder('shoebill')
+          .select('shoe.name', 'name')
+          .addSelect('SUM(shoebill.amount)', 'amount')
+          .leftJoin('shoebill.shoe', 'shoe')
+          .groupBy('shoe.name')
+          .orderBy('amount', 'DESC')
+          .limit(3)
+          .getRawMany();
+    
+        return {
+            totalRevenue,
+            profit,
+            totalOrders,
+            successRate,
+            previousMonthRevenue,
+            currentMonthRevenue,
+            bestMonth,
+            growthRate,
+            topProducts,
+        };
+      }
 }

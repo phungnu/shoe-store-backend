@@ -1,4 +1,4 @@
-import { Controller, Param, Get, Post, Body } from '@nestjs/common';
+import { Controller, Param, Get, Post, Body, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BillService } from './bill.service';
 import { failResponse, successResponse } from 'src/utils/http';
@@ -56,6 +56,16 @@ export class BillController {
             const res = await this.billService.updateStatus(input.id, input.status);
             return successResponse(res);
         }catch(error){
+            return failResponse('Execute service went wrong', 'ServiceException');
+        }
+    }
+
+    @Get('/statistics')
+    async getStatistics(@Query('month') month: number, @Query('year') year: number): Promise<any> {
+        try {
+            const stats = await this.billService.getStatistics(month, year);
+            return successResponse(stats);
+        } catch (error) {
             return failResponse('Execute service went wrong', 'ServiceException');
         }
     }

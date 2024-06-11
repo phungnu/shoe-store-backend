@@ -6,6 +6,7 @@ import { ICreateBill } from './bill.type';
 import { Shoe } from 'src/shoe/shoe.entity';
 import { ShoeBill } from 'src/shoebill/shoebill.entity';
 import { User } from 'src/user/user.entity';
+import { FactSale1 } from 'src/fact-sale1/fact-sale1.entity';
 
 @Injectable()
 export class BillService {
@@ -14,6 +15,7 @@ export class BillService {
         @InjectRepository(Shoe) private readonly shoeRepo: Repository<Shoe>,
         @InjectRepository(ShoeBill) private readonly shoeBillRepo: Repository<ShoeBill>,
         @InjectRepository(User) private readonly userRepo: Repository<User>,
+        @InjectRepository(FactSale1) private readonly factSale1Repo: Repository<FactSale1>,
     ){}
 
     async findAll(): Promise<Bill[]> {
@@ -136,7 +138,11 @@ export class BillService {
           .orderBy('amount', 'DESC')
           .limit(3)
           .getRawMany();
-    
+        
+
+        const factSale1 = this.factSale1Repo.find();
+        const potential = factSale1[0].Visitor_to_Lead_Conversion_Rate;
+
         return {
             totalRevenue,
             profit,
@@ -147,6 +153,7 @@ export class BillService {
             bestMonth,
             growthRate,
             topProducts,
+            potential,
         };
       }
 }

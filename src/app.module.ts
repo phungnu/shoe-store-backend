@@ -19,6 +19,8 @@ import { FactSale3Module } from './fact-sale3/fact-sale3.module';
 import { FactSale1 } from './fact-sale1/fact-sale1.entity';
 import { FactSale2 } from './fact-sale2/fact-sale2.entity';
 import { FactSale3 } from './fact-sale3/fact-sale3.entity';
+import { TimeModule } from './time/time.module';
+import { Time } from './time/time.entity';
 
 @Module({
 	imports: [
@@ -28,7 +30,7 @@ import { FactSale3 } from './fact-sale3/fact-sale3.entity';
 			username: 'root',
 			password: 'root',
 			database: 'thuctapcoso',
-			entities: [User, Shoe, ShoeBill, Bill, FactSale1, FactSale2, FactSale3],
+			entities: [User, Shoe, ShoeBill, Bill, FactSale1, FactSale2, FactSale3, Time],
 			synchronize: true,
 		}),
 		JwtModule.register({
@@ -44,7 +46,8 @@ import { FactSale3 } from './fact-sale3/fact-sale3.entity';
 		CitiesModule,
 		FactSale1Module,
 		FactSale2Module,
-		FactSale3Module
+		FactSale3Module,
+		TimeModule
 	],
 	controllers: [
 		AppController

@@ -96,8 +96,7 @@ export class BillService {
                 }
             ),
         ]);
-        
-        
+
         let totalRevenue = 0, profit = 0, totalOrders = allBills.length, successfulOrders = 0, previousMonthRevenue = 0, currentMonthRevenue = 0;
 
         for ( const bill of allBills ) {
@@ -150,7 +149,8 @@ export class BillService {
           .getRawMany();
         
 
-        const factSale1 = this.factSale1Repo.find();
+        const factSale1 = await this.factSale1Repo.find();
+
         const potential = factSale1[0].Visitor_to_Lead_Conversion_Rate;
 
         return {

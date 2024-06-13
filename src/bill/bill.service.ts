@@ -20,7 +20,10 @@ export class BillService {
 
     async findAll(): Promise<Bill[]> {
         return await this.billRepo.find({
-            relations: ['user', 'shoebills', 'shoebills.shoe']
+            relations: ['user', 'shoebills', 'shoebills.shoe'],
+            order: {
+                createAt: 'DESC',
+            },
         });
     }
 

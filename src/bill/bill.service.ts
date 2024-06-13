@@ -81,16 +81,23 @@ export class BillService {
     
         const [currentMonthBills, previousMonthBills, allBills] = await Promise.all([
             this.billRepo.createQueryBuilder('bill')
+                .leftJoinAndSelect('bill.shoebills', 'shoebills')
+                .leftJoinAndSelect('shoebills.shoe', 'shoe')
                 .where('MONTH(bill.createAt) = :month AND YEAR(bill.createAt) = :year', { month, year })
                 .getMany(),
             this.billRepo.createQueryBuilder('bill')
+                .leftJoinAndSelect('bill.shoebills', 'shoebills')
+                .leftJoinAndSelect('shoebills.shoe', 'shoe')
                 .where('MONTH(bill.createAt) = :previousMonth AND YEAR(bill.createAt) = :previousMonthYear', { previousMonth, previousMonthYear })
                 .getMany(),
-            this.billRepo.find(),
+            this.billRepo.find(
+                {
+                    relations: ['shoebills', 'shoebills.shoe']
+                }
+            ),
         ]);
         
-        console.log(allBills);
-
+        
         let totalRevenue = 0, profit = 0, totalOrders = allBills.length, successfulOrders = 0, previousMonthRevenue = 0, currentMonthRevenue = 0;
 
         for ( const bill of allBills ) {
